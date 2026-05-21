@@ -1,19 +1,35 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const initialEmp = {
-  id: '', name: '', email: '', job: '', pay:''
-}
 
-const EmployeeUpdate = () => {
-    const[emp,setEmp] = useState(initialEmp);
+
+const EmployeeUpdate = ({emp, setState}) => {
+    const[newEmp,setNewEmp] = useState(emp);
+
+    useEffect(() =>{
+      emp &&
+      setNewEmp(emp)
+    },[emp])
+
     const handleChange = (event) => {
       const{name,value} = event.target;
-      setEmp(prev => (
+      setNewEmp(prev => (
         {...prev, [name]: value}
       ))
     }
     const handleSubmit = (event) =>{
       event.preventDefault();
+      setState(prev => (
+        {
+          ...prev,
+          empTable: prev.empTable.map(item =>
+            (
+              item.id === emp.id ?
+              newEmp : item
+            )
+          )
+        }
+      ))
+
     }
   return (
     <>
@@ -23,7 +39,7 @@ const EmployeeUpdate = () => {
           <input
           type="text"
           name="name"
-          value={emp.name}
+          value={newEmp.name}
           onChange={handleChange}
           placeholder='이름'
           />
@@ -33,7 +49,7 @@ const EmployeeUpdate = () => {
           <input
           type="email"
           name="email"
-          value={emp.email}
+          value={newEmp.email}
           onChange={handleChange}
           placeholder='이메일'
           />
@@ -43,7 +59,7 @@ const EmployeeUpdate = () => {
           <input
           type="text"
           name="job"
-          value={emp.job}
+          value={newEmp.job}
           onChange={handleChange}
           placeholder='직업'
           />
@@ -53,7 +69,7 @@ const EmployeeUpdate = () => {
           <input
           type="number"
           name="pay"
-          value={emp.pay}
+          value={newEmp.pay}
           onChange={handleChange}
           placeholder='급여'
           />

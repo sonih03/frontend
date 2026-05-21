@@ -24,7 +24,7 @@ const initalState = {
 
 const EmployeePage = () => {
   const [state, setState] = useState(initalState);
-  const {empTable, selectedId} = state;
+  const {empTable, emp, selectedId, mode} = state;
 
   useEffect(() => {
     selectedId &&
@@ -35,7 +35,22 @@ const EmployeePage = () => {
         }
     ))
 
-  },[selectedId])
+  },[selectedId,empTable])
+
+  const handleDelete = () =>{
+    if(!selectedId){
+      alert("삭제할 데이터를 선택하세요")
+      return;
+    }
+    setState(prev => (
+      {
+        ...prev,
+        empTable: prev.empTable.filter(item => item.id !== selectedId),
+        emp: initialEmp,
+        selectedId: ""
+      }
+    ))
+  }
    
   return (
     <div>
@@ -43,13 +58,19 @@ const EmployeePage = () => {
       <EmployeeTable state={state}/>
 
       <div>
-        <button>등록</button>
-        <button>수정</button>
-        <button>삭제</button>
+        <button onClick={() => setState(prev=>({...prev, mode:"register"}))}>등록</button>
+        <button onClick={() => setState(prev=>({...prev, mode:"update"}))}>수정</button>
+        <button onClick={() => setState(prev=>({...prev, mode:"delite"}))}>삭제</button>
       </div>
-
-      <EmployeeRegister setState = {setState}/>
-      <EmployeeUpdate/>
+      {
+        mode === "register" ? 
+        <EmployeeRegister setState = {setState}/>
+        : mode === "update" ?
+        <EmployeeUpdate emp={emp} setState={setState}/>
+        : <button onClick={handleDelete}>위 데이터를 삭제하시겠습니까?</button>
+      }
+      
+      
     </div>
   )
 }

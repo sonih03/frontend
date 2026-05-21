@@ -24,6 +24,10 @@ const EmployeeRegister = ({setState}) => {
           ]
         }
       ))
+      setState(prev=>({
+        ...prev,
+        selectedId: prev.empTable[prev.empTable.length-1].id
+      }))
       setEmp(initialEmp)
     }
   return (
