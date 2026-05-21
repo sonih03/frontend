@@ -1,11 +1,11 @@
 import React from 'react'
 
-const TodoPage = () => {
+const HomePage = () => {
   return (
     <div>
-      TodoPage
+      HomePage
     </div>
   )
 }
 
-export default TodoPage
+export default HomePage

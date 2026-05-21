@@ -1,7 +1,7 @@
 import React from 'react'
 import LoginForm from '../../no2_components/user/LoginForm'
 
-const Loginpage = ({users,setLoginMode}) => {
+const LoginPage = ({users, setLoginMode}) => {
   return (
     <LoginForm
         users={users}
@@ -9,5 +9,4 @@ const Loginpage = ({users,setLoginMode}) => {
     />
   )
 }
-
-export default Loginpage
+export default LoginPage
