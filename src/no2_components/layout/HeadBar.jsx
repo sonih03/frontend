@@ -1,111 +1,190 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+// HeaderBar.jsx
 
-const HeadBar = ({ menuOpen, setMenuOpen }) => {
-  // 버튼 클릭 시 active 토글 (선택 느낌)
-  const [activeButton, setActiveButton] = useState('')
+import React from 'react'
+import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
+
+const HeaderBar = ({ loginMode, setLoginMode }) => {
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setLoginMode(prev=>(
+      {...prev, isLogin: false, username: ""}
+    ))
+      alert("로그아웃 되었습니다.")
+      navigate("/login")
+  }
 
   return (
-    <Header>
-      <LeftSection>
-        <MenuButton onClick={() => setMenuOpen(!menuOpen)}>
-          ☰
-        </MenuButton>
-        <Logo>Logo</Logo>
-      </LeftSection>
+    <Container>
 
-      <RightSection>
-        <AuthButton
-          active={activeButton === 'login'}
-          onClick={() => setActiveButton('login')}
-        >
-          로그인
-        </AuthButton>
+      <Logo onClick={() => navigate("/")}>
+        MySystem
+      </Logo>
 
-        <AuthButton
-          active={activeButton === 'signup'}
-          onClick={() => setActiveButton('signup')}
-        >
-          회원가입
-        </AuthButton>
-      </RightSection>
-    </Header>
+      <Menu>
+
+        {loginMode.isLogin ?
+
+          <UserSection>
+
+            <UserName>
+              👋 {loginMode.username} 님
+            </UserName>
+
+            <LogoutButton onClick={handleLogout}>
+              로그아웃
+            </LogoutButton>
+
+          </UserSection>
+
+          :
+
+          <ButtonGroup>
+
+            <LoginButton onClick={() => navigate("/login")}>
+              로그인
+            </LoginButton>
+
+            <RegisterButton onClick={() => navigate("/register")}>
+              회원가입
+            </RegisterButton>
+
+          </ButtonGroup>
+        }
+
+      </Menu>
+
+    </Container>
   )
 }
 
-export default HeadBar
+export default HeaderBar
 
-// ==========================
-// Styled Components
-// ==========================
 
-const Header = styled.header`
+const Container = styled.header`
+
   width: 100%;
-  height: 60px;
+  height: 70px;
 
-  background-color: #222;
-  color: white;
+  background: #1e293b;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  padding: 0 20px;
-  position: fixed;
+  padding: 0 32px;
+
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+  position: sticky;
   top: 0;
-  left: 0;
 
   z-index: 1000;
-`
 
-const LeftSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-`
-
-const Logo = styled.div`
-  font-size: 22px;
-  font-weight: bold;
-`
-
-const RightSection = styled.div`
-  display: flex;
-  gap: 10px;
-
-  @media (max-width: 768px) {
+  @media (max-width: 768px){
     display: none;
   }
-`
+`;
 
-const AuthButton = styled.button`
-  padding: 8px 14px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+const Logo = styled.div`
 
-  /* 기본 색 */
-  background-color: ${({ active }) => (active ? '#ff6f61' : 'white')};
-  color: ${({ active }) => (active ? 'white' : '#222')};
-
-  /* 호버 시 색상 변화 */
-  &:hover {
-    background-color: ${({ active }) => (active ? '#ff6f61' : '#ddd')};
-    color: ${({ active }) => (active ? 'white' : '#222')};
-  }
-`
-
-const MenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  color: white;
   font-size: 24px;
+  font-weight: bold;
+
+  color: #4dabf7;
+
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover{
+    opacity: 0.8;
+  }
+`;
+
+const Menu = styled.div`
+
+  display: flex;
+  align-items: center;
+`;
+
+const UserSection = styled.div`
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+`;
+
+const UserName = styled.div`
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  background: rgba(255,255,255,0.08);
+
+  padding: 10px 14px;
+
+  border-radius: 10px;
+`;
+
+const ButtonGroup = styled.div`
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+`;
+
+const BaseButton = styled.button`
+
+  border: none;
+  outline: none;
+
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
   cursor: pointer;
 
-  @media (max-width: 768px) {
-    display: block;
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: 0.2s;
+
+  &:hover{
+    transform: translateY(-1px);
   }
-`
+`;
+
+const LoginButton = styled(BaseButton)`
+
+  background: white;
+  color: #1e293b;
+
+  &:hover{
+    background: #f1f5f9;
+  }
+`;
+
+const RegisterButton = styled(BaseButton)`
+
+  background: #3b82f6;
+  color: white;
+
+  &:hover{
+    background: #2563eb;
+  }
+`;
+
+const LogoutButton = styled(BaseButton)`
+
+  background: #ef4444;
+  color: white;
+
+  &:hover{
+    background: #dc2626;
+  }
+`;

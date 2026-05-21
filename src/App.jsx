@@ -1,47 +1,73 @@
+// App.jsx
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { useState } from 'react'
+import styled from 'styled-components'
 
 import HomePage from './no1_pages/HomePage'
 import TodoPage from './no1_pages/TodoPage'
 import EmployeePage from './no1_pages/EmployeePage'
 
-import HeadBar from './no2_components/layout/HeadBar'
-import SideBar from './no2_components/layout/SideBar'
+import HeaderBar from './no2_components/layout/HeadBar'
+import SiderBar from './no2_components/layout/SideBar'
+import LoginPage from './no1_pages/user/Loginpage'
+import { useState } from 'react'
+import RegisterPage from './no1_pages/user/RegisterPage'
 
-import styled from 'styled-components'
+const initialState = [
+  {id: 1, username: "john", password: "1111"},
+  {id: 2, username: "peter", password: "1111"},
+  {id: 3, username: "susan", password: "1111"},
+  {id: 4, username: "sue", password: "1111"},
+]
+
+const initialMode = {
+  isLogin: false, 
+  username: ""
+}
 
 function App() {
-
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [users, setUsers] = useState(initialState);
+  const [loginMode, setLoginMode] = useState(initialMode);
 
   return (
     <BrowserRouter>
-
-      <AppContainer>
-
-        <HeadBar
-          menuOpen={menuOpen}
-          setMenuOpen={setMenuOpen}
+      {console.log(users)}
+      <Container>
+  
+        <HeaderBar
+          loginMode={loginMode}
+          setLoginMode={setLoginMode}
         />
 
-        <Layout>
+        <BodyLayout>
 
-          <SideBar
-            menuOpen={menuOpen}
-            setMenuOpen={setMenuOpen}
-          />
+          <SiderBar/>
 
-          <Content>
+          <PageContainer>
+
             <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/todo" element={<TodoPage />} />
-              <Route path="/employee" element={<EmployeePage />} />
+              <Route path="/login" element={
+                <LoginPage
+                    users={users}
+                    setLoginMode={setLoginMode}
+                />
+                }/>
+              <Route path="/register" element={
+                <RegisterPage
+                   setUsers={setUsers}
+                />
+                }/>
+
+              <Route path="/" element={<HomePage/>}/>
+              <Route path="/todo" element={<TodoPage/>}/>
+              <Route path="/employee" element={<EmployeePage/>}/>
             </Routes>
-          </Content>
 
-        </Layout>
+          </PageContainer>
 
-      </AppContainer>
+        </BodyLayout>
+
+      </Container>
 
     </BrowserRouter>
   )
@@ -49,23 +75,24 @@ function App() {
 
 export default App
 
-const AppContainer = styled.div`
-  background-color: #f5f5f5;
-  min-height: 100vh;
-`
 
-const Layout = styled.div`
-  display: flex;
-  margin-top: 60px;
-`
+const Container = styled.div`
+    width: 100%;
+    min-height: 100vh;
+    background: #f1f5f9;
+`;
 
-const Content = styled.main`
-  margin-left: 220px;
-  padding: 30px;
-  width: 100%;
+const BodyLayout = styled.div`
+    display: flex;
+`;
 
-  @media (max-width: 768px) {
-    margin-left: 0;
-    padding: 20px;
-  }
-`
+const PageContainer = styled.main`
+    flex: 1;
+    padding: 32px;
+    background: #f8fafc;
+    min-height: calc(100vh - 70px);
+
+    @media (max-width: 768px){
+        padding: 90px 20px 20px 20px;
+    }
+`;

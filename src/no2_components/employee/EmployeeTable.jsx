@@ -8,21 +8,17 @@ const EmployeeTable = ({infos}) => {
                 {Object.keys(infos[0]).map(key=>(
                     <th>{key}</th>
                 ))}
-                
             </tr>
-            {infos.map(item=>(
+            {infos.map(item => (
                 <tr>
-                    {Object.values(item).map(value =>(
+                    {Object.values(item).map(value => (
                         <td>{value}</td>
                     ))}
                 </tr>
             ))}
-            
         </table>
-      
+        
     </div>
   )
 }
-
 export default EmployeeTable
-
