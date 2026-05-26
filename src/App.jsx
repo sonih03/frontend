@@ -12,33 +12,20 @@ import SiderBar from './no2_components/layout/SiderBar'
 import LoginPage from './no1_pages/user/LoginPage'
 import { useState } from 'react'
 import RegisterPage from './no1_pages/user/RegisterPage'
+import EmployeeProvider from './no0_context/EmployeeContext'
+import UserProvider from './no0_context/UserContext'
 
-const initialState = [
-  {id: 1, username: "john", password: "1111"},
-  {id: 2, username: "peter", password: "1111"},
-  {id: 3, username: "susan", password: "1111"},
-  {id: 4, username: "qwe", password: "123"},
-]
 
-const initialMode = {
-  isLogin: false, 
-  username: ""
-}
+
 
 function App() {
-  const [users, setUsers] = useState(initialState);
-  const [loginMode, setLoginMode] = useState(initialMode);
 
   return (
     <BrowserRouter>
-      {console.log(users)}
       <Container>
-  
-        <HeaderBar
-          loginMode={loginMode}
-          setLoginMode={setLoginMode}
-        />
-
+      <UserProvider>
+        <HeaderBar/>
+      </UserProvider>
         <BodyLayout>
 
           <SiderBar/>
@@ -46,21 +33,22 @@ function App() {
           <PageContainer>
 
             <Routes>
-              <Route path="/login" element={
-                <LoginPage
-                    users={users}
-                    setLoginMode={setLoginMode}
-                />
+              <UserProvider>
+                <Route path="/login" element={
+                <LoginPage/>
                 }/>
               <Route path="/register" element={
-                <RegisterPage
-                   setUsers={setUsers}
-                />
+                <RegisterPage />
                 }/>
-
+              </UserProvider>
+              
               <Route path="/" element={<HomePage/>}/>
               <Route path="/todo" element={<TodoPage/>}/>
-              <Route path="/employee" element={<EmployeePage/>}/>
+              <Route path="/employee" element={
+                <EmployeeProvider>
+                  <EmployeePage/>
+                </EmployeeProvider>
+                }/>
             </Routes>
 
           </PageContainer>

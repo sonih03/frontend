@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import UserContext from '../../no0_context/UserContext';
 
 const initialState = {
   id: "",
@@ -9,7 +10,8 @@ const initialState = {
   confirmPassword: ""
 }
 
-const RegisterForm = ({ setUsers }) => {
+const RegisterForm = () => {
+  const {dispatch} = useContext(UserContext);
 
   const [user, setUser] = useState(initialState);
   const navigate = useNavigate();
@@ -31,16 +33,10 @@ const RegisterForm = ({ setUsers }) => {
       return;
     }
 
-    setUsers(prev => (
-      [
-        ...prev,
-        {
-          id: Date.now(),
-          username: user.username,
-          password: user.password
-        }
-      ]
-    ))
+    dispath({type: "register", payload: {
+      id: Date.now(), 
+      user
+    }})
 
     alert("회원가입 성공")
 

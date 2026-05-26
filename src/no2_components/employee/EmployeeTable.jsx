@@ -1,20 +1,27 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { EmployeeContext } from '../../no0_context/EmployeeContext'
 
-const EmployeeTable = ({state}) => {
-    const {emp} = state;
+const EmployeeTable = () => {
+  const {state} = useContext(EmployeeContext);
+  const {emp} = state;
+
   return (
     <>
         <table>
-          <tr>
-            {emp && Object.keys(emp).map(key=>(
-              <th>{key}</th>
-            ))}
-          </tr>
-          <tr>
-             {emp && Object.values(emp).map(value=>(
-              <td>{value}</td>
-            ))}
-          </tr>
+          <thead>
+            <tr>
+              {emp && Object.keys(emp).map(key=>(
+                <th key={key}>{key}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+               {emp && Object.values(emp).map((value, index)=>(
+                <td key={index}>{value}</td>
+              ))}
+            </tr>
+          </tbody>
         </table>
     </>
   )

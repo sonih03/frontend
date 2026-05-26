@@ -1,19 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import UserContext from '../../no0_context/UserContext';
 
 const initialState = {
   username: "",
   password: ""
 }
 
-const LoginForm = ({ users, setLoginMode }) => {
+const LoginForm = () => {
+  const {dispatch} = useContext(UserContext);
   const [user, setUser] = useState(initialState);
   const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
     setUser(prev => ({
       ...prev,
       [name]: value
@@ -31,11 +32,7 @@ const LoginForm = ({ users, setLoginMode }) => {
     if (loginUser) {
       alert("로그인 성공")
 
-      setLoginMode(prev => ({
-        ...prev,
-        isLogin: true,
-        username: loginUser.username
-      }))
+      dispatchEvent({type:"login",paload:loginUser})
 
       navigate("/")
     } else {
