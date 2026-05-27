@@ -22,10 +22,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Container>
-      <UserProvider>
+    <UserProvider>
+       <Container>
+      
         <HeaderBar/>
-      </UserProvider>
+      
         <BodyLayout>
 
           <SiderBar/>
@@ -33,14 +34,14 @@ function App() {
           <PageContainer>
 
             <Routes>
-              <UserProvider>
+             
                 <Route path="/login" element={
                 <LoginPage/>
                 }/>
               <Route path="/register" element={
                 <RegisterPage />
                 }/>
-              </UserProvider>
+             
               
               <Route path="/" element={<HomePage/>}/>
               <Route path="/todo" element={<TodoPage/>}/>
@@ -56,6 +57,8 @@ function App() {
         </BodyLayout>
 
       </Container>
+    </UserProvider>
+     
 
     </BrowserRouter>
   )

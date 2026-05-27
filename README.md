@@ -5,6 +5,8 @@ server 띄우기: npm run dev
 
 router: npm install react-router-dom
 
+아이콘: npm install react-icons
+
 CSS(스타일): npm install styled-components
 
     <div>

@@ -1,6 +1,6 @@
 import React, { Children, createContext, useReducer } from 'react'
 
-export const UserContext = createContext;
+export const UserContext = createContext();
 
 const initialUsers = [
   {id: 1, username: "john", password: "1111"},
