@@ -13,6 +13,7 @@ import LoginPage from './no1_pages/user/LoginPage'
 import { useState } from 'react'
 import RegisterPage from './no1_pages/user/RegisterPage'
 import EmployeeProvider from './no0_context/EmployeeContext'
+import TodoProvider from './no0_context/TodoContext'
 import UserProvider from './no0_context/UserContext'
 
 
@@ -44,7 +45,11 @@ function App() {
              
               
               <Route path="/" element={<HomePage/>}/>
-              <Route path="/todo" element={<TodoPage/>}/>
+              <Route path="/todo" element={
+                <TodoProvider>
+                  <TodoPage/>
+                </TodoProvider>
+              }/>
               <Route path="/employee" element={
                 <EmployeeProvider>
                   <EmployeePage/>
