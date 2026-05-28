@@ -1,11 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { EmployeeContext } from '../../no0_context/EmployeeContext';
+import { useDispatch, useSelector } from 'react-redux';
+// import { EmployeeContext } from '../../no0_context/EmployeeContext';
+import styled from 'styled-components';
+import {update} from '../../no3_store/slices/employeeSlice';
 
 
 
 const EmployeeUpdate = () => {
-  const {state,dispatch} = useContext(EmployeeContext)
-  const {emp} = state;
+  
+  const dispatch = useDispatch();
+  const {emp} = useSelector(state=>state.emp);
     const[newEmp,setNewEmp] = useState(emp);
 
     useEffect(() =>{
@@ -22,8 +26,7 @@ const EmployeeUpdate = () => {
     const handleSubmit = (event) =>{
       event.preventDefault();
       
-      dispatch({type:"update",payload:newEmp})
-
+      dispatch(update(newEmp));
     }
   return (
     <>

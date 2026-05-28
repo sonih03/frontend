@@ -12,9 +12,8 @@ import SiderBar from './no2_components/layout/SiderBar'
 import LoginPage from './no1_pages/user/LoginPage'
 import { useState } from 'react'
 import RegisterPage from './no1_pages/user/RegisterPage'
-import EmployeeProvider from './no0_context/EmployeeContext'
-import TodoProvider from './no0_context/TodoContext'
-import UserProvider from './no0_context/UserContext'
+import { Provider } from 'react-redux';
+import store from './no3_store';
 
 
 
@@ -23,48 +22,42 @@ function App() {
 
   return (
     <BrowserRouter>
-    <UserProvider>
-       <Container>
-      
-        <HeaderBar/>
-      
-        <BodyLayout>
+      <Provider store = {store}>
+        <Container>
+        
+          <HeaderBar/>
+        
+          <BodyLayout>
 
-          <SiderBar/>
+            <SiderBar/>
 
-          <PageContainer>
+            <PageContainer>
 
-            <Routes>
-             
-                <Route path="/login" element={
-                <LoginPage/>
-                }/>
-              <Route path="/register" element={
-                <RegisterPage />
-                }/>
-             
+              <Routes>
               
-              <Route path="/" element={<HomePage/>}/>
-              <Route path="/todo" element={
-                <TodoProvider>
-                  <TodoPage/>
-                </TodoProvider>
-              }/>
-              <Route path="/employee" element={
-                <EmployeeProvider>
-                  <EmployeePage/>
-                </EmployeeProvider>
+                  <Route path="/login" element={
+                  <LoginPage/>
+                  }/>
+                <Route path="/register" element={
+                  <RegisterPage />
+                  }/>
+              
+                
+                <Route path="/" element={<HomePage/>}/>
+                <Route path="/todo" element={
+                
+                    <TodoPage/>
+                  
                 }/>
-            </Routes>
+                <Route path="/employee" element={<EmployeePage/>}/>
+              </Routes>
 
-          </PageContainer>
+            </PageContainer>
 
-        </BodyLayout>
+          </BodyLayout>
 
-      </Container>
-    </UserProvider>
-     
-
+        </Container>
+      </Provider>
     </BrowserRouter>
   )
 }

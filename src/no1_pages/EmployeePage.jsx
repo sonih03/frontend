@@ -7,16 +7,20 @@ import EmployeeList from '../no2_components/employee/EmployeeList'
 import EmployeeTable from '../no2_components/employee/EmployeeTable'
 import EmployeeRegister from '../no2_components/employee/EmployeeRegister'
 import EmployeeUpdate from '../no2_components/employee/EmployeeUpdate'
+import { useDispatch, useSelector } from 'react-redux';
 import { EmployeeContext } from '../no0_context/EmployeeContext';
+import { setEmp, remove, SetMode } from '../no3_store/slices/employeeSlice';
 
 const EmployeePage = () => {
-  const {state, dispatch} = useContext(EmployeeContext);
-  const {mode} = state;
-  const {selectedId,empTable} = state;
+
+
+  const {selectedId,empTable,mode} = useSelector(state => state.emp);
+  const dispatch = useDispatch();
 
   useEffect(()=>{
+    const newEmp = empTable.filter(item => item.id === selectedId)[0]
     selectedId &&
-    dispatch({type:"set_emp", payload: empTable.filter(item => item.id === selectedId)[0]})
+    dispatch(setEmp(newEmp))//newemp가 action.payload임
   }, [selectedId, empTable])
 
   const handleDelete = () => {
@@ -25,7 +29,7 @@ const EmployeePage = () => {
       alert("삭제할 데이터를 선택하세요");
       return;
     }
-    dispatch({type:"delete"})
+    dispatch(remove())
   }
 
   return (
@@ -66,19 +70,19 @@ const EmployeePage = () => {
 
             <ButtonGroup>
               <ActionButton
-                onClick={() => dispatch({type: "mode", payload: "register"})}
+                onClick={() => dispatch(SetMode("register"))}
               >
                 등록
               </ActionButton>
 
               <ActionButton
-                onClick={() => dispatch({type: "mode", payload: "update"})}
+                onClick={() => dispatch(SetMode("update"))}
               >
                 수정
               </ActionButton>
 
               <DeleteButton
-                onClick={() => dispatch({type: "mode", payload: "delete"})}
+                onClick={() => dispatch(SetMode("delete"))}
               >
                 삭제
               </DeleteButton>

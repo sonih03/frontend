@@ -1,19 +1,20 @@
 // HeaderBar.jsx
 
-import React, {useContext} from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
-import {UserContext} from '../../no0_context/UserContext'
+import { useDispatch, useSelector } from 'react-redux';
+// import {UserContext} from '../../no0_context/UserContext'
+import { logout } from '../../no3_store/slices/userSlice';
 
 const HeaderBar = () => {
-  const {state, dispatch} = useContext(UserContext);
-  const{isLogin} = state;
-  const{loginMode} = state;
+  const {isLogin,username} = useSelector(state=>state.user);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const handleLogout = () => {
-      dispatch({type: "logout"})
+      dispatch(logout());
       alert("로그아웃 되었습니다.")
       navigate("/login")
   }
@@ -27,12 +28,12 @@ const HeaderBar = () => {
 
       <Menu>
 
-        {state.isLogin ?
+        {isLogin ?
 
           <UserSection>
 
             <UserName>
-              👋 {state.username} 님
+              👋 {username} 님
             </UserName>
 
             <LogoutButton onClick={handleLogout}>

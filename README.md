@@ -4,8 +4,12 @@ node_modules 다시 설치: npm install
 server 띄우기: npm run dev
 
 router: npm install react-router-dom
-
 아이콘: npm install react-icons
+redux: npm install react-redux @reduxjs/toolkit
+json-server(RestfulAPI): npm install -g json-server
+api 라이브러리: npm install axios
+
+
 
 CSS(스타일): npm install styled-components
 
@@ -25,7 +29,15 @@ reducer
   action.type: 함수의 타입
   action.payload: state를 변화시킬 수 있는 인수 
 
-  useState => useReducer => useContext => redux
+  useState => useReducer => useContext => redux(slice,query)
 
   context: state, 내부함수(reducers)
   redux: state, 내부함수(reducers), 외부함수(extraReducers: api)
+
+
+Restful API
+get 전체 방식: url => return: 테이블(json)
+get 하나 데이터: url + id => return: 오브젝트(row=행)
+post 방식: url, 오브젝트 => return : 오브젝트
+put 방식: url + id, 오브젝트 => return: 오브젝트
+delete 방식: url + id => return: id

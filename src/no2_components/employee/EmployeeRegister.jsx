@@ -1,6 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useActionData } from 'react-router-dom'
-import { EmployeeContext } from '../../no0_context/EmployeeContext'
+import { useDispatch } from 'react-redux'
+import { register } from '../../no3_store/slices/employeeSlice' 
 
 const initialEmp = {
   id: '', name: '', email: '', job: '', pay:''
@@ -19,7 +20,7 @@ const initialstate = {
 }
 
 const EmployeeRegister = () => {
-    const{dispatch} = useContext(EmployeeContext);
+    const dispatch = useDispatch();
 
     const[emp,setEmp] = useState(initialEmp);
     const handleChange = (event) => {
@@ -31,7 +32,7 @@ const EmployeeRegister = () => {
     const handleSubmit = (event) =>{
       event.preventDefault();
       const newId = Date.now().toString();
-      dispatch({type: "register" , payload:{newId,emp}})
+      dispatch(register({newId,emp}))
       setEmp(initialEmp)
     }
   return (

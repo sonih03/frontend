@@ -1,18 +1,19 @@
 // [1] React 패키지에서 컴포넌트 선언(React)과 컨텍스트 사용 훅(useContext)을 불러옵니다.
-import React, { useContext } from 'react'
+import React from 'react'
 // [2] 할 일 각각의 행 아이템 컴포넌트인 TodoListChild를 불러옵니다.
 import TodoListChild from './TodoListChild'
 // [3] 스타일 지정을 위해 styled-components 라이브러리를 가져옵니다.
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 // [4] 전역 상태를 구독하기 위해 TodoContext를 가져옵니다.
-import { TodoContext } from '../../no0_context/TodoContext'
+// import { TodoContext } from '../../no0_context/TodoContext'
 
 // [5] 전역 상태의 todoList 배열 데이터를 읽어서 각 줄 컴포넌트들을 map 함수로 나열해 주는 그룹 컴포넌트입니다.
 const TodoList = () => {
   // [6] useContext를 사용해 TodoContext에 보관 중인 전역 state 데이터를 가져옵니다.
-  const { state } = useContext(TodoContext);
+ 
   // [7] state 내부에서 실제 할 일 아이템 목록이 보관된 객체 배열(todoList)을 분리합니다.
-  const { todoList } = state;
+  const { todoList } = useSelector(state => state.todo);
   
   return (
     // [8] 할 일 컴포넌트 리스트를 수직으로 정렬하고 간격을 벌릴 수 있는 스타일 컨테이너입니다.

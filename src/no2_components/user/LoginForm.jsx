@@ -1,7 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import UserContext from '../../no0_context/UserContext';
+// import UserContext from '../../no0_context/UserContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../no3_store/slices/userSlice';
 
 const initialState = {
   username: "",
@@ -9,7 +11,8 @@ const initialState = {
 }
 
 const LoginForm = () => {
-  const {dispatch} = useContext(UserContext);
+  const {users} = useSelector(state=> state.user)
+  const dispatch = useDispatch();
   const [user, setUser] = useState(initialState);
   const navigate = useNavigate();
 
@@ -32,7 +35,7 @@ const LoginForm = () => {
     if (loginUser) {
       alert("로그인 성공")
 
-      dispatchEvent({type:"login",paload:loginUser})
+      dispatch(login(loginUser.username))
 
       navigate("/")
     } else {
