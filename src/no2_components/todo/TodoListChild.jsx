@@ -1,12 +1,13 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import {
     MdCheckBox,
     MdCheckBoxOutlineBlank,
     MdRemoveCircleOutline
 } from "react-icons/md"
 import { useDispatch } from 'react-redux'
-import {toggle, update, remove} from '../../no3_store/slices/todoSlice';
+import { todoPutSlice, todoDeleteSlice } from '../../no3_store/slices/todoSlice';
 import styled from 'styled-components'
+import { todoPutApi } from '../../no3_store/apis/todo.api';
 
 const TodoListChild = ({item}) => {
     const dispatch = useDispatch();
@@ -15,15 +16,16 @@ const TodoListChild = ({item}) => {
     const[value,setValue] = useState(item.subject)
 
     const handleToggle = () => {
-       dispatch(toggle(item.id ));
+        dispatch(todoPutSlice({ ...item, checked: !item.checked }));
         setEditing(false);
     }
     
     const handleUpdate = () => {
-        if (value.trim() !== "") {
-            dispatch(update({ id: item.id, value }));
+        if (value.setValue() !== "") {
+            dispatch(todoPutSlice({ ...item, subject: value }));
+            setEditing(false);
         }
-        setEditing(false);
+        
     }
 
   return (
@@ -62,7 +64,7 @@ const TodoListChild = ({item}) => {
       </TextWrapper>
       
       <RemoveButton
-        onClick={() => dispatch(remove(item.id))}
+        onClick={() => dispatch(todoDeleteSlice(item.id))}
       >
         <MdRemoveCircleOutline size={20} />
       </RemoveButton>

@@ -1,65 +1,115 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { 
+    todoAllGetApi,
+    todoPostApi,
+    todoPutApi,
+    todoDeleteApi
+} from "../apis/todo.api";
 
+export const todoAllGetSlice = createAsyncThunk(
+    "todoAllGetSlice",
+    async (_, thunkAPI) => {
+        try{
+            return await todoAllGetApi();
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const todoPutSlice = createAsyncThunk(
+    "todoPutSlice",
+    async (dataObj, thunkAPI) => {
+        try{
+            return await todoPutApi(dataObj);
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const todoPostSlice = createAsyncThunk(
+    "todoPostSlice",
+    async (dataObj, thunkAPI) => {
+        try{
+            return await todoPostApi(dataObj);
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const todoDeleteSlice = createAsyncThunk(
+    "todoDeleteSlice",
+    async (id, thunkAPI) => {
+        try{
+            return await todoDeleteApi(id);
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 const initialObj = {id: "", subject: "", checked: false}
+
 const initialState = {
-  // 화면에 렌더링될 실제 할 일들의 목록이 담긴 객체 배열입니다.
-  todoList: [
-    {id: 1, subject: "HTML 공부", checked: true},
-    {id: 2, subject: "CSS 공부", checked: true},
-    {id: 3, subject: "React 공부", checked: true},
-    {id: 4, subject: "Python 공부", checked: true},
-  ],
-  // 새 할 일을 타이핑해서 추가할 때 사용할 임시 입력값 저장소 객체입니다.
-  todoObj : initialObj
+  todoList: [],
+  todoObj: initialObj,
+  loading: false,
+  error: null
 };
 
 const todoSlice = createSlice({
     name: "todoSlice",
     initialState,
     reducers: {
-        remove: (state, action) => {
-            state.todoList = state.todoList.filter(todo =>
-                (todo.id !== action.payload)
-            )
-        },
-        update: (state,action) => {
-            state.todoList = state.todoList.map(todo =>
-                (todo.id === action.payload.id ? 
-                    {...todo, subject : action.payload.value}
-                    : todo
-                )
-            )
-        },
-        toggle: (state,action) => {
-            state.todoList = state.todoList.map(todo =>(
-                todo.id ===action.payload ?
-                    {...todo, checked: !todo.checked}
-                    : todo
-            ))
-        },
-        change: (state,action) => {
+        change: (state, action) => {
             state.todoObj = {
                 ...state.todoObj,
                 [action.payload.name] : action.payload.value
             }
         },
-        register: (state) => {
-            state.todoList = [
-                ...state.todoList,
-                {
-                    ...state.todoObj,
-                    id: state.todoList.length>0?
-                        Math.max(...state.todoList.map(todo=>todo.id))+1
-                        :1
-                }
-            ]
-            state.todoObj = initialObj
+        resetTodoObj: (state) => {
+            state.todoObj = initialObj;
         }
-
     },
+    extraReducers: (builder) => {
+        builder
+            .addCase(todoAllGetSlice.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(todoAllGetSlice.fulfilled, (state, action) => {
+                state.todoList = action.payload
+                state.loading = false
+            })
+            .addCase(todoAllGetSlice.rejected, (state, action) => {
+                state.error = action.payload
+                state.loading = false
+            })
+            .addCase(todoPutSlice.fulfilled, (state, action) => {
+                state.todoList = state.todoList.map(todo =>
+                    todo.id === action.payload.id ? 
+                    action.payload : todo
+                )
+                state.loading = false
+            })
+            .addCase(todoPostSlice.fulfilled, (state, action) => {
+                state.todoList = [...state.todoList, action.payload]
+                state.loading = false
+            })
+            .addCase(todoDeleteSlice.fulfilled, (state, action) => {
+                state.todoList = state.todoList.filter(todo => 
+                todo.id !== action.meta.arg,
+                state.loading = false)
+            })
+                
+    }
 })
 
-
-export const {remove, update, register, toggle, change} = todoSlice.actions;
+export const { change, resetTodoObj } = todoSlice.actions;
 export default todoSlice.reducer;

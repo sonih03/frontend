@@ -1,5 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import { employeeAllGetApi, employeePostApi } from "../apis/employee.api";
+import { 
+    employeeAllGetApi, 
+    employeePostApi, 
+    employeePutApi,
+    employeeDeleteApi
+        } from "../apis/employee.api";
 
 
 export const employeeAllGetSlice = createAsyncThunk(
@@ -19,6 +24,30 @@ export const employeePostSlice = createAsyncThunk(
     async (dataObj, thunkAPI) => {
         try{
             return await employeePostApi(dataObj);
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const employeePutSlice = createAsyncThunk(
+    "employeePutSlice",
+    async (dataObj, thunkAPI) => {
+        try{
+            return await employeePutApi(dataObj);
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const employeeDeleteSlice = createAsyncThunk(
+    "employeeDeleteSlice",
+    async (id, thunkAPI) => {
+        try{
+            return await employeeDeleteApi(id);
         }
         catch(error){
             return thunkAPI.rejectWithValue(error.message)
@@ -49,22 +78,6 @@ const employeeSlice = createSlice({
         setEmp: (state, action) => {
             state.emp = action.payload
         },
-        register: (state, action) => {
-            state.empTable = [
-                ...state.empTable,
-                {
-                    ...action.payload.emp,
-                    id: action.payload.newId
-                }
-            ]
-        },
-        update: (state, action) => {
-            state.empTable = state.empTable.map(emp=>(
-                    emp.id === state.selectedId ?
-                    action.payload : emp
-                )
-            )
-        },
         remove: (state) => {
             state.empTable = state.empTable.filter(emp=>(
                 emp.id !== state.selectedId
@@ -92,7 +105,21 @@ const employeeSlice = createSlice({
             .addCase(employeePostSlice.fulfilled, (state,action) => {
                 state.empTable = [...state.empTable, action.payload]
                 state.loading = false
-        }) 
+        })
+            .addCase(employeePutSlice.fulfilled, (state,action) => {
+                state.empTable = state.empTable.map(emp=>(
+                        emp.id === state.selectedId ?
+                        action.payload : emp
+                    )
+                )
+                state.loading = false
+        })
+            .addCase(employeeDeleteSlice.fulfilled, (state,action) => {
+                state.empTable = state.empTable.filter(emp=>(
+                emp.id !== state.selectedId
+            ))
+                state.loading = false
+        })  
     }
 })
 export const {SetMode, remove, register, update, select, setEmp } = employeeSlice.actions;

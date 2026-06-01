@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import { change, register } from '../../no3_store/slices/todoSlice';
+import { change, todoPostSlice } from '../../no3_store/slices/todoSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const TodoInsert = () => {
@@ -14,7 +14,7 @@ const TodoInsert = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(register());
+        dispatch(todoPostSlice(todoObj));
     }
         
   return (

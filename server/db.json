@@ -66,24 +66,10 @@
       "pay": 600
     },
     {
-      "id": "2",
-      "name": "Peter",
-      "email": "peter@example.com",
-      "job": "backend",
-      "pay": 600
-    },
-    {
       "id": "3",
       "name": "Susan",
       "email": "susan@example.com",
       "job": "db",
-      "pay": 600
-    },
-    {
-      "id": "4",
-      "name": "Sue",
-      "email": "sue@example.com",
-      "job": "ai",
       "pay": 600
     },
     {
@@ -99,6 +85,23 @@
       "job": "교수님의 애착인형",
       "pay": "-240",
       "id": "2bJR1bSwNyM"
+    }
+  ],
+  "todos": [
+    {
+      "id": "ML_oIe1-SYQ",
+      "subject": "ㅇㄹㅇㄹㅇㄹㅇㄹㅇㄹ",
+      "checked": true
+    },
+    {
+      "id": "R_sxEa5VCyg",
+      "subject": "열려라!",
+      "checked": true
+    },
+    {
+      "id": "e-ShnM5lCsE",
+      "subject": "아아",
+      "checked": true
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
