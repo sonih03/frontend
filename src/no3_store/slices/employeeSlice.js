@@ -1,22 +1,42 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { employeeAllGetApi, employeePostApi } from "../apis/employee.api";
 
-import { createSlice } from "@reduxjs/toolkit"
+
+export const employeeAllGetSlice = createAsyncThunk(
+    "employeeAllGetSlice",
+    async (_, thunkAPI) => {
+        try{
+            return await employeeAllGetApi();
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const employeePostSlice = createAsyncThunk(
+    "employeePostSlice",
+    async (dataObj, thunkAPI) => {
+        try{
+            return await employeePostApi(dataObj);
+        }
+        catch(error){
+            return thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 
-
-const initialEmps = [
-    {id: "1", name: "John", email: "john@example.com", job: "frontend", pay: 600},
-    {id: "2", name: "Peter", email: "peter@example.com", job: "backend", pay: 600},
-    {id: "3", name: "Susan", email: "susan@example.com", job: "db", pay: 600},
-    {id: "4", name: "Sue", email: "sue@example.com", job: "ai", pay: 600},
-]
 const initialEmp = {
   id: '', name: '', email: '', job: '', pay:''
 }
 const initialState = {
-  empTable: initialEmps,
+  empTable: [],
   emp: initialEmp,
   mode: '',
-  selectedId: ""
+  selectedId: "",
+  loading: false,
+  error: null
 }
 
 const employeeSlice = createSlice({
@@ -54,6 +74,25 @@ const employeeSlice = createSlice({
             state.mode = action.payload
         }
 
+    },
+    extraReducers: (builder) => {
+        builder 
+            .addCase(employeeAllGetSlice.pending, (state) => {
+                state.loading = true
+                state.error = null
+        }) 
+            .addCase(employeeAllGetSlice.fulfilled, (state,action) => {
+                state.empTable = action.payload
+                state.loading = false
+        }) 
+            .addCase(employeeAllGetSlice.rejected, (state,action) => {
+                state.loading = false
+                state.error = action.payload
+        }) 
+            .addCase(employeePostSlice.fulfilled, (state,action) => {
+                state.empTable = [...state.empTable, action.payload]
+                state.loading = false
+        }) 
     }
 })
 export const {SetMode, remove, register, update, select, setEmp } = employeeSlice.actions;

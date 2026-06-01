@@ -48,9 +48,7 @@ const EmployeePage = () => {
               직원 목록
             </SectionTitle>
 
-            <EmployeeList
-              
-            />
+            <EmployeeList/>
           </Card>
 
         </LeftSection>

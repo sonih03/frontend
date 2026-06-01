@@ -1,22 +1,10 @@
 import React, { useState } from 'react'
 import { useActionData } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { register } from '../../no3_store/slices/employeeSlice' 
+import { employeePostSlice  } from '../../no3_store/slices/employeeSlice' 
 
 const initialEmp = {
-  id: '', name: '', email: '', job: '', pay:''
-}
-
-const initialEmps = [
-    {id: "1", name: "John", email: "john@example.com", job: "frontend", pay: 600},
-    {id: "2", name: "Peter", email: "peter@example.com", job: "backend", pay: 600},
-    {id: "3", name: "Susan", email: "susan@example.com", job: "db", pay: 600},
-    {id: "4", name: "Sue", email: "sue@example.com", job: "ai", pay: 600},
-]
-
-const initialstate = {
-  empTable: initialEmps,
-  emp: initialEmp
+   name: '', email: '', job: '', pay:''
 }
 
 const EmployeeRegister = () => {
@@ -32,7 +20,7 @@ const EmployeeRegister = () => {
     const handleSubmit = (event) =>{
       event.preventDefault();
       const newId = Date.now().toString();
-      dispatch(register({newId,emp}))
+      dispatch(employeePostSlice(emp))
       setEmp(initialEmp)
     }
   return (

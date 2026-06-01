@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux';
-import { select } from '../../no3_store/slices/employeeSlice';
+import { employeeAllGetSlice, select } from '../../no3_store/slices/employeeSlice';
 
 const EmployeeList = () => {
     const {empTable,selectedId} = useSelector(state=>state.emp);
     const dispatch = useDispatch();
+    useEffect(() => {
+      dispatch(employeeAllGetSlice())
+    },[dispatch])
 
   return (
     <Container>
-      {empTable?.map(item => (
+      {empTable.length>0 && empTable.map(item => (
         <EmployeeButton
           key={item.id}
           $active={selectedId === item.id}
