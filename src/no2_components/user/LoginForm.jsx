@@ -28,7 +28,7 @@ const LoginForm = () => {
     event.preventDefault();
 
     if (user) {
-      console.log("user",user)
+      
       alert("로그인 성공")
 
       dispatch(userLoginSlice(user))

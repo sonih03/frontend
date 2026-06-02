@@ -104,9 +104,9 @@
       "checked": true
     }
   ],
-    "products": [
+  "products": [
     {
-      "id": 5,
+      "id": "5",
       "product_name": "스마트폰 거치대 5",
       "color": "Pink",
       "cost_price": 47723,
@@ -114,7 +114,7 @@
       "category_code": "E4"
     },
     {
-      "id": 6,
+      "id": "6",
       "product_name": "태블릿 케이스 6",
       "color": "Red",
       "cost_price": 29711,
@@ -122,7 +122,7 @@
       "category_code": "E6"
     },
     {
-      "id": 7,
+      "id": "7",
       "product_name": "고속충전 케이블 7",
       "color": "Blue",
       "cost_price": 17246,
@@ -132,7 +132,7 @@
   ],
   "sales": [
     {
-      "id": 1,
+      "id": "1",
       "user_id": 79,
       "product_id": 68,
       "quantity": 5,
@@ -141,7 +141,7 @@
       "created_at": "2026-04-24"
     },
     {
-      "id": 2,
+      "id": "2",
       "user_id": 58,
       "product_id": 93,
       "quantity": 5,
@@ -150,13 +150,14 @@
       "created_at": "2026-05-21"
     },
     {
-      "id": 3,
+      "id": "3",
       "user_id": 97,
       "product_id": 21,
       "quantity": 4,
       "discount_rate": 0.15,
       "total_price": 167269,
       "created_at": "2026-03-08"
-    }],
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

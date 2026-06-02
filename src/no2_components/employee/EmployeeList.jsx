@@ -1,14 +1,22 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useDispatch, useSelector } from 'react-redux';
-import { employeeAllGetSlice, select } from '../../no3_store/slices/employeeSlice';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { employeeAllGetSlice, select } from '../../no3_store/slices/employeeSlice';<-------------------주석처리
+
+import{//<------------------여기서 새로 import
+  userAllGetEmployee,
+  useDeleteEmployee
+  
+} from "../../no3_store/hooks/useEmployee"
 
 const EmployeeList = () => {
-    const {empTable,selectedId} = useSelector(state=>state.emp);
-    const dispatch = useDispatch();
-    useEffect(() => {
-      dispatch(employeeAllGetSlice())
-    },[dispatch])
+    // const {empTable,selectedId} = useSelector(state=>state.emp);//<-----------------------여기부터 주석처리
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //   dispatch(employeeAllGetSlice())
+    // },[dispatch])
+
+  const{data: employees=[], isLoading: loading, error} = useAllGetEmployee();//<------------------이거 만듦
 
   return (
     <Container>

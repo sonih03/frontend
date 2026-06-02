@@ -7,6 +7,7 @@ export const userLoginSlice = createAsyncThunk(
     async(userObj, thunkApi) => {
         try{
             const user = await userLoginApi(userObj)
+            console.log("user",user)
             localStorage.setItem("user", JSON.stringify(user))
             return user
         }
@@ -31,9 +32,9 @@ export const userRegisterSlice = createAsyncThunk(
 
 export const userLogoutSlice = createAsyncThunk(
     "userLogoutSlice",
-    async(userObj, thunkApi) => {
+    async(_, thunkApi) => {
         try{
-            localStorage.removeItem(user)
+            localStorage.removeItem("user")
         }
         catch(error){
             return thunkApi.rejectWithValue(error.message)
@@ -42,7 +43,7 @@ export const userLogoutSlice = createAsyncThunk(
 )
 
 export const getUser = () => {
-    return localStorage.getItem("user")
+    return JSON.parse(localStorage.getItem("user"))
 }
 
 const initialState = {
@@ -70,8 +71,12 @@ const userSlice = createSlice({
             }) 
             .addCase(userLoginSlice.fulfilled, (state,action) => {
                 const user = getUser();
-                console.log("user",user)
-                console.log("confirmuser", action.payload)
+                if(user.username === action.payload.username 
+                    && user.password === action.payload.password
+                ){
+                    state.isLogin = true
+                    state.user = action.payload
+                }
                 state.loading = false
             }) 
             .addCase(userLoginSlice.rejected, (state,action) => {
