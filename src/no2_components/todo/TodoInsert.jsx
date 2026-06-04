@@ -1,20 +1,34 @@
 import React from 'react'
 import styled from 'styled-components'
-import { change, todoPostSlice } from '../../no3_store/slices/todoSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { usePostRegisterTodo } from '../../no3_store/hooks/useTodo'
+import { useState } from 'react'
+
+
+const initialState = {
+  "subject" : "",
+  "checked": false,
+}
 
 const TodoInsert = () => {
-    const {todoObj} = useSelector(state=>state.todo);
-    const dispatch = useDispatch();
+    const [todo, setTodo ] = useState(initialState)
+    const registerMutation = usePostRegisterTodo();
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        dispatch(change({name,value}))
+        setTodo(prev => ({
+          ...prev,[name] : value
+        }))
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        dispatch(todoPostSlice(todoObj));
+        try{
+          await registerMutation.mutateAsync(todo)
+          alert("등록성공")
+        }catch{
+          alert("등록실패")
+        }
+        
     }
         
   return (
@@ -22,7 +36,7 @@ const TodoInsert = () => {
       <Input 
         type="text"
         name="subject"
-        value={todoObj.subject}
+        value={todo.subject}
         onChange={handleChange}
         required
         placeholder='할 일을 입력하세요...' 

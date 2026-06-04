@@ -4,29 +4,29 @@ import styled from 'styled-components'
 // import { employeeAllGetSlice, select } from '../../no3_store/slices/employeeSlice';<-------------------주석처리
 
 import{//<------------------여기서 새로 import
-  userAllGetEmployee,
-  useDeleteEmployee
-  
+  useAllGetEmployee
 } from "../../no3_store/hooks/useEmployee"
 
-const EmployeeList = () => {
+const EmployeeList = ({selectedId, setSelectedId}) => {
     // const {empTable,selectedId} = useSelector(state=>state.emp);//<-----------------------여기부터 주석처리
     // const dispatch = useDispatch();
     // useEffect(() => {
     //   dispatch(employeeAllGetSlice())
     // },[dispatch])
 
-  const{data: employees=[], isLoading: loading, error} = useAllGetEmployee();//<------------------이거 만듦
+  const{data: empTable=[], isLoading, error} = useAllGetEmployee();//<------------------이거 만듦
+  if(isLoading) return <h3>Loading...</h3>
+  if(error) return <h3>{error.message}</h3>
 
   return (
     <Container>
-      {empTable.length>0 && empTable.map(item => (
+      {empTable?.map(item => (
         <EmployeeButton
           key={item.id}
           $active={selectedId === item.id}
-          onClick={() => dispatch(select(item.id))}
+          onClick={() => setSelectedId(item.id)}
         >
-          <Name>{item.name}</Name>
+          <Name>{item.name || item.username}</Name>
           <Job>{item.job}</Job>
         </EmployeeButton>
       ))}

@@ -1,89 +1,92 @@
 import React, { useState } from 'react'
-import { useActionData } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { employeePostSlice  } from '../../no3_store/slices/employeeSlice' 
 
 const initialEmp = {
    name: '', email: '', job: '', pay:''
 }
 
+import { usePostRegisterEmployee } from "../../no3_store/hooks/useEmployee";
+
 const EmployeeRegister = () => {
-    const dispatch = useDispatch();
-
-    const[emp,setEmp] = useState(initialEmp);
+    const [emp, setEmp] = useState(initialEmp);
+    const registerMutation = usePostRegisterEmployee();
+    
     const handleChange = (event) => {
-      const{name,value} = event.target;
-      setEmp(prev => (
-        {...prev, [name]: value}
-      ))
-    }
-    const handleSubmit = (event) =>{
+      const { name, value } = event.target;
+      setEmp(prev => ({
+        ...prev, [name]: value
+      }));
+    };
+    
+    const handleSubmit = async (event) => {
       event.preventDefault();
-      if (!emp.name || !emp.email || !emp.job || !emp.pay) {
-        alert("모든 필드를 입력해주세요.");
-        return;
+      
+      try {
+        await registerMutation.mutateAsync(emp);
+        setEmp(initialEmp);
+        alert("직원 등록이 완료되었습니다.");
+      } catch {
+        alert("직원 등록 실패");
       }
-      dispatch(employeePostSlice(emp))
-      setEmp(initialEmp)
-      alert("직원 등록이 완료되었습니다.");
-    }
-  return (
-    <FormContainer onSubmit={handleSubmit}>
-      <FormTitle>새 직원 등록</FormTitle>
-      <FormGrid>
-        <FormGroup>
-          <Label>이름</Label>
-          <Input
-            type="text"
-            name="name"
-            value={emp.name}
-            onChange={handleChange}
-            placeholder="홍길동"
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>이메일</Label>
-          <Input
-            type="email"
-            name="email"
-            value={emp.email}
-            onChange={handleChange}
-            placeholder="example@email.com"
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>직업</Label>
-          <Input
-            type="text"
-            name="job"
-            value={emp.job}
-            onChange={handleChange}
-            placeholder="프론트엔드 개발자"
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>급여 (원)</Label>
-          <Input
-            type="number"
-            name="pay"
-            value={emp.pay}
-            onChange={handleChange}
-            placeholder="3500000"
-            required
-          />
-        </FormGroup>
-      </FormGrid>
-      <SubmitButton type="submit">등록하기</SubmitButton>
-    </FormContainer>
-  )
+    }; 
 }
+//     return (
+//       <FormContainer onSubmit={handleSubmit}>
+//         <FormTitle>새 직원 등록</FormTitle>
+//         <FormGrid>
+//           <FormGroup>
+//             <Label>이름</Label>
+//             <Input
+//               type="text"
+//               name="name"
+//               value={emp.name}
+//               onChange={handleChange}
+//               placeholder="홍길동"
+//               required
+//             />
+//           </FormGroup>
+//           <FormGroup>
+//             <Label>이메일</Label>
+//             <Input
+//               type="email"
+//               name="email"
+//               value={emp.email}
+//               onChange={handleChange}
+//               placeholder="example@email.com"
+//               required
+//             />
+//           </FormGroup>
+//           <FormGroup>
+//             <Label>직업</Label>
+//             <Input
+//               type="text"
+//               name="job"
+//               value={emp.job}
+//               onChange={handleChange}
+//               placeholder="프론트엔드 개발자"
+//               required
+//             />
+//           </FormGroup>
+//           <FormGroup>
+//             <Label>급여 (원)</Label>
+//             <Input
+//               type="number"
+//               name="pay"
+//               value={emp.pay}
+//               onChange={handleChange}
+//               placeholder="3500000"
+//               required
+//             />
+//           </FormGroup>
+//         </FormGrid>
+//         <SubmitButton type="submit">등록하기</SubmitButton>
+//       </FormContainer>
+//     );
+// }; 
 
-export default EmployeeRegister
+export default EmployeeRegister;
 
+// --- 스타일드 컴포넌트 영역 ---
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
@@ -163,4 +166,3 @@ const SubmitButton = styled.button`
     transform: translateY(0);
   }
 `;
-

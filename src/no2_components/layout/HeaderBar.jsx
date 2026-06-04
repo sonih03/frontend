@@ -1,34 +1,38 @@
-// HeaderBar.jsx
-
 import React from 'react'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux';
-// import {UserContext} from '../../no0_context/UserContext'
-import { userLogoutSlice } from '../../no3_store/slices/userSlice';
+import { getCurrentUser, useLogoutUser } from '../../no3_store/hooks/useUser'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+
 
 const HeaderBar = () => {
-  const {isLogin,user} = useSelector(state=>state.user);
-  const dispatch = useDispatch();
-
+  const {data:user} = useQuery({
+    queryKey: ["user"],
+    queryFn: getCurrentUser,
+    initialData: getCurrentUser 
+  })
   const navigate = useNavigate();
+  const logout = useLogoutUser();
+  const queryClient = useQueryClient();
 
   const handleLogout = () => {
-      dispatch(userLogoutSlice());
-      alert("로그아웃 되었습니다.")
-      navigate("/login")
+    
+    logout();
+    queryClient.setQueryData(["user"], null)
+    alert("로그아웃 되었습니다.")
+    navigate("/login")
   }
 
   return (
     <Container>
 
       <Logo onClick={() => navigate("/")}>
-        MySystem
+        집가고싶다
       </Logo>
 
       <Menu>
 
-        {isLogin ?
+        {user ?
 
           <UserSection>
 

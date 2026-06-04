@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-// import UserContext from '../../no0_context/UserContext';
-import { useDispatch, useSelector } from 'react-redux';
-import { userLoginSlice } from '../../no3_store/slices/userSlice';
+import { useLoginUser } from '../../no3_store/hooks/useUser';
+
 
 const initialState = {
   username: "",
@@ -11,10 +10,9 @@ const initialState = {
 }
 
 const LoginForm = () => {
-  const {users} = useSelector(state=> state.user)
-  const dispatch = useDispatch();
-  const [user, setUser] = useState(initialState);
+  const [user, setUser] = useState(initialState)
   const navigate = useNavigate();
+  const loginMutation = useLoginUser();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -24,18 +22,30 @@ const LoginForm = () => {
     }))
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (user) {
-      
-      alert("로그인 성공")
-
-      dispatch(userLoginSlice(user))
-
-      navigate("/")
+    if (user.username.trim() === "") {
+      alert("이름을 넣어주세요!")
+      return
+    }
+    if (user.username.trim() === "") {
+      alert("비밀번호를 넣어주세요!")
+      return
+    }
+      if(user.username.trim()){
+        try{
+        await loginMutation.mutateAsync(user)
+        alert("로그인 성공")
+        navigate("/")
+      }
+      catch{
+        alert("로그인 실패")
+      }
+      return     
     } 
   }
+
 
   return (
     <Container>

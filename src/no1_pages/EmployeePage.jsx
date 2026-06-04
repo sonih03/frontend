@@ -1,6 +1,4 @@
-// EmployeePage.jsx
-
-import React, { useEffect } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components';
 
 import EmployeeList from '../no2_components/employee/EmployeeList'
@@ -11,34 +9,29 @@ import EmployeeUpdate from '../no2_components/employee/EmployeeUpdate'
 // import { setEmp, employeeDeleteSlice, SetMode } from '../no3_store/slices/employeeSlice';
 
 import{//<------------------여기서 새로 import
-  userAllGetEmployee,
   useDeleteEmployee
   
 }from "../no3_store/hooks/useEmployee"
 
 const EmployeePage = () => {
-  const [selectedId,setSelectedId] = useState(1);//<----잠시 임시방편?
-
-  // const {selectedId,empTable,mode} = useSelector(state => state.emp);
-  // const dispatch = useDispatch();
-
-  // useEffect(()=>{
-  //   const newEmp = empTable.filter(item => item.id === selectedId)[0]
-  //   selectedId &&
-  //   dispatch(setEmp(newEmp))//newemp가 action.payload임
-  // }, [selectedId, empTable])
-
-  
-
-  const handleDelete = () => {
-
-    // if(!selectedId) {
-    //   alert("삭제할 데이터를 선택하세요");//<---------------여기는 일단 주석처리?
-    //   return;
+  const [selectedId,setSelectedId] = useState("");//<----잠시 임시방편?
+  const [mode, SetMode] = useState("register")
+  const deleteMutation = useDeleteEmployee();
+  const handleDelete = async () => {
+    if(!selectedId) {
+      alert("삭제할 데이터를 선택하세요");//<---------------여기는 일단 주석처리?
+      return;
     // }
     // dispatch(employeeDeleteSlice(selectedId))//이거 주석처리하고
-    useDeleteEmployee(selectedId)//<----------------------이거 선언, 다음 emplist로 감
-    alert("직원 정보가 삭제되었습니다.");
+    }
+    try{
+      await deleteMutation.mutateAsync(selectedId)//<----------------------이거 선언, 다음 emplist로 감
+      alert("직원 정보가 삭제되었습니다.");
+      setSelectedId(null);
+    }
+    catch(error){
+      alert("직원 삭제 실패")
+    }
   }
 
 
@@ -59,7 +52,10 @@ const EmployeePage = () => {
               직원 목록
             </SectionTitle>
 
-            <EmployeeList/>
+            <EmployeeList
+              selectedId = {selectedId}
+              setSelectedId = {setSelectedId}
+            />
           </Card>
 
         </LeftSection>
@@ -72,6 +68,7 @@ const EmployeePage = () => {
             </SectionTitle>
 
             <EmployeeTable
+              selectedId = {selectedId}
             />
           </Card>
 
@@ -80,21 +77,21 @@ const EmployeePage = () => {
             <ButtonGroup>
               <ActionButton
                 $active={mode === "register"}
-                onClick={() => dispatch(SetMode("register"))}
+                onClick={() => SetMode("register")}
               >
                 등록
               </ActionButton>
 
               <ActionButton
                 $active={mode === "update"}
-                onClick={() => dispatch(SetMode("update"))}
+                onClick={() => SetMode("update")}
               >
                 수정
               </ActionButton>
 
               <DeleteButton
                 $active={mode === "delete"}
-                onClick={() => dispatch(SetMode("delete"))}
+                onClick={() => SetMode("delete")}
               >
                 삭제
               </DeleteButton>
@@ -103,13 +100,18 @@ const EmployeePage = () => {
             {
               mode === "register" ?
 
-              <EmployeeRegister/>
+              <EmployeeRegister
+                selectedId = {setSelectedId}
+              />
 
               :
 
               mode === "update" ?
 
-              <EmployeeUpdate/>
+              <EmployeeUpdate
+                key={selectedId}
+                selectedId = {selectedId}
+              />
 
               :
 

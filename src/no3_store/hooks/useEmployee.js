@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import{
-    employeeAllgetApi,
+import {
+    employeeAllGetApi,
+    employeeGetApi,
     employeePostApi,
     employeePutApi,
     employeeDeleteApi
@@ -10,7 +11,15 @@ import{
 export const useAllGetEmployee = () => {
     return useQuery({
         queryKey: ["employees"],
-        queryFn: employeeAllgetApi
+        queryFn: employeeAllGetApi
+    })
+}
+
+export const useGetEmployee = (id) => {
+    return useQuery({
+        queryKey: ["employees", id],
+        queryFn: () => employeeGetApi(id),
+        enabled: !!id
     })
 }
 
@@ -18,32 +27,35 @@ export const usePostRegisterEmployee = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: employeePostApi,
-        onSuccess: (dataObj) => {
+        onSuccess: (dataObj) =>{
             queryClient.setQueryData(
                 ["employees"],
-                (oldData = []) => [
-                    ...oldData, dataObj
+                (old=[]) =>[
+                    ...old, dataObj
                 ]
             )
+            // 캐쉬 제거, 데이터 다시 불러오기기
+            queryClient.invalidateQueries({
+                queryKey: ["employees"]
+            })
         }
     })
 }
-
 export const usePutUpdateEmployee = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: employeePutApi,
-        onSuccess: (dataObj) => {
+        onSuccess: (dataObj) =>{
             queryClient.setQueryData(
                 ["employees"],
-                (oldData = []) => oldData.map(item=>
+                (old=[]) => old.map(item=>
                     item.id === dataObj.id ?
                     dataObj : item
                 )
             );
-            queryClient.setQueryData(
+            queryClient.invalidateQueries(
                 ["employees", dataObj.id]
-            );           
+            );
         }
     })
 }
@@ -52,18 +64,17 @@ export const useDeleteEmployee = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: employeeDeleteApi,
-        onSuccess: (id) => {
+        onSuccess: (id) =>{
             queryClient.setQueryData(
                 ["employees"],
-                (oldData = []) => oldData.filter(item=>//얘는 필터임
-                    item.id !== id ?//id하고 같지 않은것만
-                    dataObj : item
+                (old=[]) => old.filter(item=>
+                    item.id !== id 
                 )
             );
-            queryClient.setQueryData(
+            queryClient.removeQueries(
                 ["employees", id],
-            );           
+            );
         }
     })
-}//return id 해줘야함, 어디서? api쪽에서 근데 delete만
-//다음에 employee page로 가서 위에랑 그 밑에 뭐 주석처리함
+}
+

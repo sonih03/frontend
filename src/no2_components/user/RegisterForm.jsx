@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { userRegisterSlice } from '../../no3_store/slices/userSlice';
+import { useRegisterUser } from '../../no3_store/hooks/useUser';
 
 const initialState = {
-  id: "",
   username: "",
   password: "",
   confirmPassword: "",
@@ -15,14 +13,12 @@ const initialState = {
 }
 
 const RegisterForm = () => {
-  const dispatch = useDispatch();
-
   const [user, setUser] = useState(initialState);
+  const registerMutation = useRegisterUser();
   const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
     setUser(prev => ({
       ...prev,
       [name]: value
@@ -31,18 +27,20 @@ const RegisterForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
     if (user.password !== user.confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
 
     const { confirmPassword, ...userData } = user;
-    dispatch(userRegisterSlice(user));
-
-    alert("회원가입 성공")
-
-    navigate("/login")
+    try{
+      registerMutation.mutate(userData)
+      alert("회원가입 성공")
+      navigate("/login")
+    }
+    catch{
+      alert("회원가입 실패")
+    }
   }
 
   return (

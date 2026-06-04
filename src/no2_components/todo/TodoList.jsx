@@ -1,11 +1,14 @@
 import React from 'react'
 import TodoListChild from './TodoListChild'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useAllGetTodo } from '../../no3_store/hooks/useTodo'
+
 
 const TodoList = () => {
  
-  const { todoList } = useSelector(state => state.todo);
+  const{data: todoList=[], isLoading, error} = useAllGetTodo()
+  if(isLoading) return <h3>loading...</h3>
+  if(error) return <h3>{error.message}</h3>
   
   return (
     <ListContainer>

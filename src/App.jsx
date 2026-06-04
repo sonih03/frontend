@@ -12,9 +12,11 @@ import SiderBar from './no2_components/layout/SiderBar'
 import LoginPage from './no1_pages/user/LoginPage'
 import { useState } from 'react'
 import RegisterPage from './no1_pages/user/RegisterPage'
-import { Provider } from 'react-redux';
 import store from './no3_store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+
+const queryClient = new QueryClient();
 
 
 
@@ -22,42 +24,29 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Provider store = {store}>
-        <Container>
-        
-          <HeaderBar/>
-        
-          <BodyLayout>
-
-            <SiderBar/>
-
-            <PageContainer>
-
-              <Routes>
-              
-                  <Route path="/login" element={
-                  <LoginPage/>
+        <QueryClientProvider client = {queryClient}>
+          <Container>   
+            <HeaderBar/>  
+            <BodyLayout>
+              <SiderBar/>
+              <PageContainer>
+                <Routes>       
+                    <Route path="/login" element={
+                    <LoginPage/>
+                    }/>
+                  <Route path="/register" element={
+                    <RegisterPage />
+                    }/>                            
+                  <Route path="/" element={<HomePage/>}/>
+                  <Route path="/todo" element={                
+                      <TodoPage/>                 
                   }/>
-                <Route path="/register" element={
-                  <RegisterPage />
-                  }/>
-              
-                
-                <Route path="/" element={<HomePage/>}/>
-                <Route path="/todo" element={
-                
-                    <TodoPage/>
-                  
-                }/>
-                <Route path="/employee" element={<EmployeePage/>}/>
-              </Routes>
-
-            </PageContainer>
-
-          </BodyLayout>
-
-        </Container>
-      </Provider>
+                  <Route path="/employee" element={<EmployeePage/>}/>
+                </Routes>
+              </PageContainer>
+            </BodyLayout>
+          </Container>
+        </QueryClientProvider>        
     </BrowserRouter>
   )
 }

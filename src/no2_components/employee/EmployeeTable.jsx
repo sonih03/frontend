@@ -1,56 +1,47 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useGetEmployee } from '../../no3_store/hooks/useEmployee';
 
-const EmployeeTable = () => {
-  const { emp } = useSelector(state => state.emp);
 
-  // Check if emp is loaded and has a valid ID
-  const hasEmp = emp && emp.id;
 
-  const headerTranslations = {
-    id: '사원 번호',
-    name: '이름',
-    email: '이메일',
-    job: '담당 직무',
-    pay: '급여'
-  };
+const EmployeeTable = ({selectedId}) => {
+  const {data: emp, isLoading, error} = useGetEmployee(selectedId)
 
-  const formatValue = (key, value) => {
-    if (key === 'pay') {
-      const num = Number(value);
-      return isNaN(num) ? value : `${num.toLocaleString()} 원`;
-    }
-    return value;
-  };
+  if (!selectedId) {
+    return (
+      <TableWrapper>
+        <Placeholder>
+          <PlaceholderIcon>👥</PlaceholderIcon>
+          <PlaceholderText>조회할 직원을 목록에서 선택해주세요.</PlaceholderText>
+        </Placeholder>
+      </TableWrapper>
+    );
+  }
+
+  if(isLoading) return<h3>loading...</h3>
+  if(error) return <h3>{error.message}</h3>
+
+
 
   return (
     <TableWrapper>
-      {hasEmp ? (
         <StyledTable>
           <thead>
             <tr>
-              {Object.keys(emp).map(key => (
-                <Th key={key}>{headerTranslations[key] || key}</Th>
+              {emp && Object.keys(emp).map(key => (
+                <Th key={key}>{key}</Th>
               ))}
             </tr>
           </thead>
           <tbody>
             <Row>
-              {Object.entries(emp).map(([key, value]) => (
-                <Td key={key} data-label={headerTranslations[key] || key}>
-                  {formatValue(key, value)}
-                </Td>
+              {emp && Object.values(emp).map(value => (
+                <Td key={value}>{value}</Td>
               ))}
             </Row>
           </tbody>
         </StyledTable>
-      ) : (
-        <Placeholder>
-          <PlaceholderIcon>👥</PlaceholderIcon>
-          <PlaceholderText>직원 목록에서 직원을 선택하시면 상세 정보가 여기에 표시됩니다.</PlaceholderText>
-        </Placeholder>
-      )}
+     
     </TableWrapper>
   )
 }

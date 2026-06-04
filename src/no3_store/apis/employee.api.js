@@ -1,5 +1,5 @@
 import axios from "axios";
-import { data } from "react-router-dom";
+
 
 
 
@@ -9,9 +9,19 @@ export const employeeAllGetApi = async () => {
         return response.data
     }
     catch(error){
-        return error
+        throw error
     }
 }
+
+export const employeeGetApi = async (id) => {
+    try{
+        const response = await axios.get(`http://localhost:3001/employees/${id}`)
+        return response.data
+    }
+    catch(error){
+        throw error;
+    }
+};
 
 export const employeePostApi = async (dataObj) => {
     try{
@@ -19,7 +29,7 @@ export const employeePostApi = async (dataObj) => {
         return response.data
     }
     catch(error){
-        return error
+        throw error
     }
 }
 
@@ -29,17 +39,16 @@ export const employeePutApi = async (dataObj) => {
         return response.data
     }
     catch(error){
-        return error
+        throw error
     }
 }
 
 export const employeeDeleteApi = async (id) => {
     try{
         await axios.delete(`http://localhost:3001/employees/${id}`)
-        return id//<---------여기를 바꿈
+        return id
     }
     catch(error){
-        return error
-       
+        throw error
     }
 }

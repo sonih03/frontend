@@ -4,35 +4,63 @@ import {
     MdCheckBoxOutlineBlank,
     MdRemoveCircleOutline
 } from "react-icons/md"
-import { useDispatch } from 'react-redux'
-import { todoPutSlice, todoDeleteSlice } from '../../no3_store/slices/todoSlice';
+
 import styled from 'styled-components'
-import { todoPutApi } from '../../no3_store/apis/todo.api';
+import { usePutToggleTodo, usePutUpdateTodo, useGetTodo, useDeleteTodo } from '../../no3_store/hooks/useTodo';
+
 
 const TodoListChild = ({item}) => {
-    const dispatch = useDispatch();
+    const updateMutation = usePutUpdateTodo();
+    const deleteMutation = useDeleteTodo();
+    const toggleMutation = usePutToggleTodo();
+  
     
     const[editing,setEditing] = useState(false)
-    const[value,setValue] = useState(item.subject)
+    const[todo,setTodo] = useState(item)
 
-    const handleToggle = () => {
-        dispatch(todoPutSlice({ ...item, checked: !item.checked }));
-        setEditing(false);
-    }
+    // const handleToggle = () => {
+    //     dispatch(todoPutSlice({ ...item, checked: !item.checked }));
+    //     setEditing(false);
+    // }
     
-    const handleUpdate = () => {
-        if (value.setValue() !== "") {
-            dispatch(todoPutSlice({ ...item, subject: value }));
-            setEditing(false);
-        }
+    const handleToggle = () => {
+      
+      try{
+        setTodo(prev => ({...prev, checked:!todo.checked}))
+        toggleMutation.mutateAsync({...todo, checked: !todo.checked});
+        setEditing(false);
+        alert("토글 성공")
+      }
+      catch{
+        alert("토글 실패")
+      }
+            
         
+        
+    }
+
+    const handleUpdate = () => {
+      if (todo.subject.trim() !== ""){
+        }
+      try{
+        updateMutation.mutateAsync(todo);
+          setEditing(false);
+          alert("수정 성공")
+      }
+      catch{
+        alert("수정 실패")
+      }
+            
+        
+        
+      
     }
 
   return (
     <TodoItem>
       <CheckboxWrapper onClick={handleToggle}> 
         {
-        item.checked ?
+        todo.checked ?
         <CheckedIcon/> : <UncheckedIcon/>
         }
       </CheckboxWrapper>
@@ -42,8 +70,13 @@ const TodoListChild = ({item}) => {
             editing ?
                 <EditInput
                     type='text'
-                    value={value}
-                    onChange={(e) => setValue(e.target.value)}
+                    name="subject"
+                    value={todo.subject}
+                    onChange={(e) => setTodo(
+                      prev => ({
+                        ...prev,
+                        [e.target.name] : e.target.value
+                      }))}
                     onBlur = {handleUpdate}
                     onKeyDown={(e) => {
                         if(e.key === "Enter") handleUpdate();
@@ -52,9 +85,9 @@ const TodoListChild = ({item}) => {
                 />
                 :
                 <TodoText
-                  $checked={item.checked}
+                  $checked={todo.checked}
                   onDoubleClick={() => {
-                    setValue(item.subject);
+                    setTodo(item);
                     setEditing(true);
                   }}
                 >
@@ -64,7 +97,7 @@ const TodoListChild = ({item}) => {
       </TextWrapper>
       
       <RemoveButton
-        onClick={() => dispatch(todoDeleteSlice(item.id))}
+        onClick={() => deleteMutation.mutateAsync(item.id)}
       >
         <MdRemoveCircleOutline size={20} />
       </RemoveButton>

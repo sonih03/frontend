@@ -10,6 +10,16 @@ export const todoAllGetApi = async () => {
     }
 }
 
+export const todoGetApi = async (id) => {
+    try{
+        await axios.get(`http://localhost:3001/todos/${id}`)
+        return response.data
+    }
+    catch(error){
+        return error
+    }
+}
+
 export const todoPostApi = async (dataObj) => {
     try{
         const response = await axios.post("http://localhost:3001/todos", dataObj)
@@ -33,7 +43,7 @@ export const todoPutApi = async (dataObj) => {
 export const todoDeleteApi = async (id) => {
     try{
         const response = await axios.delete(`http://localhost:3001/todos/${id}`)
-        return response.data
+        return id;
     }
     catch(error){
         return error
